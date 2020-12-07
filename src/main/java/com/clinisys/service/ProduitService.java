@@ -1,7 +1,11 @@
 package com.clinisys.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
-
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -21,9 +25,16 @@ public class ProduitService {
     @Autowired
     private FournisseurService fournisseurService;
     
-    public Collection findProduit (Long idProduit) {
-    	return produitRepository.findByidProduit(idProduit).getAcheter();
-        
+    public List<LinkedHashMap<String,String>> findProduit (Long idProduit) {
+    	List<LinkedHashMap<String,String>> data = new ArrayList<>();
+    	 produitRepository.findByidProduit(idProduit).getAcheter().forEach(element-> {
+    		LinkedHashMap<String,String> map=new LinkedHashMap();
+    		map.put("Fournisseur",element.getFournisseur().getNomFRS());
+    		map.put("Prix",element.getPrixAchat());
+    		data.add(map);
+ 
+    	});;
+    	 return data;
     }
 
     public Produit saveProduit(Produit produit) {
